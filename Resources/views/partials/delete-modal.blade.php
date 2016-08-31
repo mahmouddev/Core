@@ -6,7 +6,14 @@
                 <h4 class="modal-title" id="delete-confirmation-title">{{ trans('core::core.modal.title') }}</h4>
             </div>
             <div class="modal-body">
-                {{ trans('core::core.modal.confirmation-message') }}
+                <div class="default-message">
+                    <?php if (isset($message)): ?>
+                        {!! $message !!}
+                    <?php else: ?>
+                        {{ trans('core::core.modal.confirmation-message') }}
+                    <?php endif; ?>
+                </div>
+                <div class="custom-message"></div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline btn-flat" data-dismiss="modal">{{ trans('core::core.button.cancel') }}</button>
@@ -25,6 +32,20 @@
             var actionTarget = button.data('action-target');
             var modal = $(this);
             modal.find('form').attr('action', actionTarget);
+
+            if (button.data('message') != '') {
+                modal.find('.custom-message').show().empty().append(button.data('message'));
+                modal.find('.default-message').hide();
+            } else {
+                modal.find('.default-message').show();
+                modal.find('.custom-message').hide();
+            }
+
+            if (button.data('remove-submit-button') === true) {
+                modal.find('button[type=submit]').hide();
+            } else {
+                modal.find('button[type=submit]').show();
+            }
         });
     });
 </script>
